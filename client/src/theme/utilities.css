@@ -1,0 +1,25 @@
+@theme {
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-round: 9999px;
+
+  /* Shadows - subtle for dark theme */
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.6);
+  --shadow-md: 0 8px 20px rgba(0, 0, 0, 0.65);
+  --shadow-glow: 0 8px 30px rgba(59, 130, 246, 0.12); /* soft blue glow for primary */
+
+  /* Transitions */
+  --trans-fast: 120ms cubic-bezier(0.4, 0, 0.2, 1);
+  --trans-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --trans-slow: 350ms cubic-bezier(0.4, 0, 0.2, 1);
+}
