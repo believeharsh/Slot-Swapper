@@ -97,6 +97,7 @@ export const SwapRequestStatus = {
 export type SwapRequestStatus = typeof SwapRequestStatus[keyof typeof SwapRequestStatus];
 
 export interface SwapRequest {
+  message: any;
   _id: string;
   requesterId: User;
   requesterSlotId: Event;

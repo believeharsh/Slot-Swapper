@@ -14,36 +14,48 @@ const RequestsPage: React.FC = () => {
   const { incomingRequests, outgoingRequests, isLoading, error } = useSelector(
     (state: RootState) => state.swap
   );
-  // const { user } = useSelector((s: RootState) => s.auth);s
 
-  // local map of requestId -> loading state / message
-  const [processing, setProcessing] = useState<Record<string, boolean>>({});
-  const [messageMap, setMessageMap] = useState<Record<string, string>>({});
+  // modal state
+  const [selectedRequest, setSelectedRequest] = useState<SwapRequest | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  // local loading state for accept/reject inside modal
+  const [actionLoading, setActionLoading] = useState(false);
+  const [actionMessage, setActionMessage] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchIncomingRequests());
     dispatch(fetchOutgoingRequests());
   }, [dispatch]);
 
-  const setProc = (id: string, v: boolean) =>
-    setProcessing(prev => ({ ...prev, [id]: v }));
+  const openModal = (req: SwapRequest) => {
+    setSelectedRequest(req);
+    setActionMessage(null);
+    setModalOpen(true);
+  };
 
-  const setMsg = (id: string, msg: string) =>
-    setMessageMap(prev => ({ ...prev, [id]: msg }));
+  const closeModal = () => {
+    setSelectedRequest(null);
+    setModalOpen(false);
+    setActionLoading(false);
+    setActionMessage(null);
+  };
 
   const handleRespond = async (requestId: string, accept: boolean) => {
-    setProc(requestId, true);
-    setMsg(requestId, '');
+    setActionLoading(true);
+    setActionMessage(null);
+
     try {
       await dispatch(respondToSwapRequest({ requestId, accepted: accept })).unwrap();
-      setMsg(requestId, accept ? 'Accepted' : 'Rejected');
-      // incomingRequests reducer already removes the request on success.
+      setActionMessage(accept ? 'Request accepted' : 'Request rejected');
+      // incomingRequests reducer already removes the request on success,
+      // but refresh incoming/outgoing if you want
+      dispatch(fetchIncomingRequests());
+      dispatch(fetchOutgoingRequests());
+      setTimeout(() => closeModal(), 900);
     } catch (err: any) {
-      setMsg(requestId, err?.message || 'Action failed');
-    } finally {
-      setProc(requestId, false);
-      // clear message after 1.2s
-      setTimeout(() => setMsg(requestId, ''), 1200);
+      setActionMessage(err?.message || 'Action failed');
+      setActionLoading(false);
     }
   };
 
@@ -65,7 +77,16 @@ const RequestsPage: React.FC = () => {
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Incoming */}
         <section>
-          <h3 className="text-lg font-semibold mb-3">Incoming</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold">Incoming</h3>
+            <button
+              className="text-sm px-3 py-1 rounded-md"
+              style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-primary)' }}
+              onClick={() => dispatch(fetchIncomingRequests())}
+            >
+              Refresh
+            </button>
+          </div>
 
           {isLoading && incomingRequests.length === 0 ? (
             <p>Loading incoming requests...</p>
@@ -82,9 +103,11 @@ const RequestsPage: React.FC = () => {
                   style={{ background: 'var(--bg-card)', border: '1px solid var(--color-border)' }}
                 >
                   <div>
-                    <div className="font-medium">{/* show requester and brief */}From: {typeof req.requesterId === 'string' ? req.requesterId : req.requesterId.name}</div>
+                    <div className="font-medium">
+                      From: {typeof req.requesterId === 'string' ? req.requesterId : req.requesterId.name}
+                    </div>
                     <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                      Wants: {typeof req.targetSlotId !== 'undefined' && req.targetSlotId ? (req.targetSlotId.title ?? 'their slot') : 'slot'}
+                      Wants: {req.targetSlotId?.title ?? 'slot'}
                     </div>
                     <div className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>
                       Sent: {new Date(req.createdAt).toLocaleString()}
@@ -92,31 +115,29 @@ const RequestsPage: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {messageMap[req._id] ? (
-                      <div className="text-sm px-3 py-1 rounded-md" style={{ background: 'transparent', color: 'var(--color-text-secondary)' }}>
-                        {messageMap[req._id]}
-                      </div>
-                    ) : (
-                      <>
-                        <button
-                          onClick={() => handleRespond(req._id, true)}
-                          disabled={processing[req._id]}
-                          className="px-3 py-1 rounded-md text-sm"
-                          style={{ background: 'var(--color-primary-500)', color: 'white' }}
-                        >
-                          {processing[req._id] ? 'Accepting...' : 'Accept'}
-                        </button>
+                    <button
+                      onClick={() => openModal(req)}
+                      className="px-3 py-1 rounded-md text-sm"
+                      style={{ background: 'transparent', border: '1px solid var(--color-border)', color: 'var(--color-text-primary)' }}
+                    >
+                      View
+                    </button>
 
-                        <button
-                          onClick={() => handleRespond(req._id, false)}
-                          disabled={processing[req._id]}
-                          className="px-3 py-1 rounded-md text-sm"
-                          style={{ background: 'var(--color-error)', color: 'white' }}
-                        >
-                          {processing[req._id] ? 'Rejecting...' : 'Reject'}
-                        </button>
-                      </>
-                    )}
+                    <button
+                      onClick={() => handleRespond(req._id, true)}
+                      className="px-3 py-1 rounded-md text-sm"
+                      style={{ background: 'var(--color-primary-500)', color: 'white' }}
+                    >
+                      Accept
+                    </button>
+
+                    <button
+                      onClick={() => handleRespond(req._id, false)}
+                      className="px-3 py-1 rounded-md text-sm"
+                      style={{ background: 'var(--color-error)', color: 'white' }}
+                    >
+                      Reject
+                    </button>
                   </div>
                 </div>
               ))}
@@ -126,7 +147,16 @@ const RequestsPage: React.FC = () => {
 
         {/* Outgoing */}
         <section>
-          <h3 className="text-lg font-semibold mb-3">Outgoing</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-lg font-semibold">Outgoing</h3>
+            <button
+              className="text-sm px-3 py-1 rounded-md"
+              style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-primary)' }}
+              onClick={() => dispatch(fetchOutgoingRequests())}
+            >
+              Refresh
+            </button>
+          </div>
 
           {isLoading && outgoingRequests.length === 0 ? (
             <p>Loading outgoing requests...</p>
@@ -145,9 +175,9 @@ const RequestsPage: React.FC = () => {
                   <div>
                     <div className="font-medium">To: {typeof req.targetUserId === 'string' ? req.targetUserId : req.targetUserId.name}</div>
                     <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
-                      Requested: {typeof req.targetSlotId !== 'undefined' && req.targetSlotId ? (req.targetSlotId.title ?? 'slot') : 'slot'}
+                      Requested: {req.targetSlotId?.title ?? 'slot'}
                     </div>
-                    <div className="text-xs mt-1 font-text-secondary" style={{ color: 'var(--color-text-secondary)' }}>
+                    <div className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>
                       Status: {req.status}
                     </div>
                   </div>
@@ -161,6 +191,80 @@ const RequestsPage: React.FC = () => {
           )}
         </section>
       </div>
+
+      {/* Detail Modal */}
+      {modalOpen && selectedRequest && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center" style={{ background: 'rgba(0,0,0,0.5)' }}>
+          <div className="w-full max-w-xl p-6 rounded-lg" style={{ background: 'var(--bg-surface)', border: '1px solid var(--color-border)' }}>
+            <div className="flex items-start justify-between">
+              <div>
+                <h3 className="text-xl font-semibold">Request Details</h3>
+                <p className="text-sm mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+                  From: {typeof selectedRequest.requesterId === 'string' ? selectedRequest.requesterId : selectedRequest.requesterId.name}
+                </p>
+              </div>
+              <button
+                onClick={closeModal}
+                className="px-2 py-1 rounded-md"
+                style={{ border: '1px solid var(--color-border)', color: 'var(--color-text-primary)' }}
+              >
+                Close
+              </button>
+            </div>
+
+            <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div style={{ border: '1px solid var(--color-border)', padding: 12, borderRadius: 8, background: 'var(--bg-card)' }}>
+                <div className="text-sm text-[var(--color-text-secondary)]">Requester Slot</div>
+                <div className="font-medium mt-1">{selectedRequest.requesterSlotId?.title ?? '—'}</div>
+                <div className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+                  {selectedRequest.requesterSlotId ? `${new Date(selectedRequest.requesterSlotId.startTime).toLocaleString()} — ${new Date(selectedRequest.requesterSlotId.endTime).toLocaleString()}` : '—'}
+                </div>
+              </div>
+
+              <div style={{ border: '1px solid var(--color-border)', padding: 12, borderRadius: 8, background: 'var(--bg-card)' }}>
+                <div className="text-sm text-[var(--color-text-secondary)]">Target Slot</div>
+                <div className="font-medium mt-1">{selectedRequest.targetSlotId?.title ?? '—'}</div>
+                <div className="text-xs mt-1" style={{ color: 'var(--color-text-secondary)' }}>
+                  {selectedRequest.targetSlotId ? `${new Date(selectedRequest.targetSlotId.startTime).toLocaleString()} — ${new Date(selectedRequest.targetSlotId.endTime).toLocaleString()}` : '—'}
+                </div>
+              </div>
+
+              <div className="md:col-span-2">
+                <div className="text-sm text-[var(--color-text-secondary)]">Message</div>
+                <div className="mt-1 p-3 rounded-md" style={{ background: 'var(--bg-card)', border: '1px solid var(--color-border)' }}>
+                  {selectedRequest.message ?? <span style={{ color: 'var(--color-text-secondary)' }}>No message provided</span>}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end gap-3">
+              {actionMessage && (
+                <div className="px-3 py-1 rounded-md" style={{ background: 'transparent', color: 'var(--color-text-secondary)' }}>
+                  {actionMessage}
+                </div>
+              )}
+
+              <button
+                onClick={() => handleRespond(selectedRequest._id, false)}
+                disabled={actionLoading}
+                className="px-4 py-2 rounded-md"
+                style={{ background: 'var(--color-error)', color: 'white' }}
+              >
+                {actionLoading ? 'Rejecting...' : 'Reject'}
+              </button>
+
+              <button
+                onClick={() => handleRespond(selectedRequest._id, true)}
+                disabled={actionLoading}
+                className="px-4 py-2 rounded-md"
+                style={{ background: 'var(--color-primary-500)', color: 'white' }}
+              >
+                {actionLoading ? 'Accepting...' : 'Accept'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
