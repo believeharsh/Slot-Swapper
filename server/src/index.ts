@@ -16,9 +16,9 @@ dotenv.config();
 // Create Express app
 const app: Application = express();
 
-// ============================================
+
 // MIDDLEWARE
-// ============================================
+
 
 // Body parser
 app.use(express.json());
@@ -46,9 +46,8 @@ if (process.env.NODE_ENV === 'development') {
   });
 }
 
-// ============================================
+
 // ROUTES
-// ============================================
 
 // Health check route
 app.get('/', (_req: Request, res: Response) => {
@@ -75,9 +74,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api', swapRoutes); // Swap routes are at root /api level
 
-// ============================================
-// ERROR HANDLING
-// ============================================
 
 // 404 handler
 app.use(notFound);
@@ -85,10 +81,7 @@ app.use(notFound);
 // Global error handler
 app.use(errorHandler);
 
-// ============================================
 // SERVER STARTUP
-// ============================================
-
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
