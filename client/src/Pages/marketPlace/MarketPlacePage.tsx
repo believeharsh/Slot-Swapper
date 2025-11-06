@@ -17,7 +17,7 @@ const MarketplacePage: React.FC = () => {
   const { events: myEvents, isLoading: myEventsLoading } = useSelector(
     (state: RootState) => state.events
   );
-  const { user } = useSelector((s: RootState) => s.auth);
+  // const { user } = useSelector((s: RootState) => s.auth);
 
   const [showRequestModal, setShowRequestModal] = useState(false);
   const [targetSlot, setTargetSlot] = useState<Event | null>(null);
@@ -53,18 +53,26 @@ const MarketplacePage: React.FC = () => {
     if (!targetSlot) return;
     setSubmitting(true);
     try {
+      // Build payload with explicit IDs. If user didn't choose an offered slot, we send undefined for mySlotId
       const payload: CreateSwapRequestData = {
-        mySlotId: offeredSlotId || '',
+        mySlotId: offeredSlotId ?? '',
         theirSlotId: targetSlot._id,
-        // message: message || undefined,
+        message: message?.trim() ? message.trim() : '',
       };
-      // If user didn't choose an offered slot, you may send mySlotId as '' - backend can interpret as no offer
+
+      // Dispatch the thunk and unwrap to throw on error
       await dispatch(createSwapRequest(payload)).unwrap();
+
       setSuccessMsg('Swap request sent');
-      // Optionally refresh incoming/outgoing slots here
+      // Refresh swappable slots so UI updates if needed
+      dispatch(fetchSwappableSlots());
+      // Optionally refresh user's events/requests here too
       setTimeout(() => closeModal(), 900);
     } catch (err: any) {
-      // error handled in slice - show brief message
+      // You could show err.message in UI - slices already set error state
+      setSubmitting(false);
+    } finally {
+      // ensure submitting flag is cleared in all cases
       setSubmitting(false);
     }
   };
@@ -153,10 +161,10 @@ const MarketplacePage: React.FC = () => {
                   {myEvents
                     .filter(ev => ev._id !== targetSlot._id) // don't offer same slot
                     .map(ev => (
-                    <option key={ev._id} value={ev._id}>
-                      {ev.title} — {new Date(ev.startTime).toLocaleString()}
-                    </option>
-                  ))}
+                      <option key={ev._id} value={ev._id}>
+                        {ev.title} — {new Date(ev.startTime).toLocaleString()}
+                      </option>
+                    ))}
                 </select>
               </div>
 

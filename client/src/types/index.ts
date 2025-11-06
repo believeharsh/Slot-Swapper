@@ -110,6 +110,7 @@ export interface SwapState {
 export interface CreateSwapRequestData {
   mySlotId: string;
   theirSlotId: string;
+  message : string
 }
 
 export interface SwapResponseData {
