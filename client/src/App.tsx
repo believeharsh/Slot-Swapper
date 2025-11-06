@@ -8,6 +8,7 @@ import SignupPage from './Pages/auth/SignupPage';
 import DashboardPage from './Pages/dashboard/DashboardPage';
 import MarketplacePage from './Pages/marketPlace/MarketPlacePage';
 import RequestsPage from './Pages/requests/RequestsPage';
+import LandingPage from './Pages/landing/landing';
 
 // ✅ ProtectedRoute — only allows access if logged in
 const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -25,8 +26,9 @@ const App: React.FC = () => {
         <Route path="/signup" element={<SignupPage />} />
 
         {/* Protected Routes */}
+        <Route path="/" element={<LandingPage />} />
         <Route
-          path="/"
+          path="/app/*"
           element={
             <ProtectedRoute>
               <Layout />
