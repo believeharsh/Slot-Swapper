@@ -209,8 +209,8 @@ The frontend build will be created in `client/dist/` and backend in `server/dist
 
 SlotSwapper is deployed using modern cloud platforms for optimal performance:
 
-- **Frontend:** [Vercel](https://vercel.com) - https://slot-swapper-pink.vercel.app
-- **Backend:** [Render](https://render.com) - https://slot-swapper-api.onrender.com
+- **Frontend:** [Vercel](https://vercel.com) 
+- **Backend:** [Render](https://render.com) 
 - **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas)
 
 ### **Deployment Notes**
@@ -288,6 +288,6 @@ This project is licensed under the **MIT License** — feel free to use, modify,
 
 ---
 
-**Built with by Harsh Dahiya Associated with Service Hive**
+**Built  by Harsh Dahiya Associated with Service Hive 💖**
 
 ⭐ **If you find this project useful, please give it a star!** ⭐
