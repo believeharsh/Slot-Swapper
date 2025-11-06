@@ -185,10 +185,10 @@ The frontend build will be created in `client/dist/` and backend in `server/dist
 
 | Feature                | Preview                                                                     |
 | ---------------------- | ---------------------------------------------------------------             |
-| **Landing Page**       | ![Landing](./assets/screenShots/slotsswapper_landing_page.png)              |
-| **Dashboard**          | ![Dashboard](./assets/screenShots/slotswapper_dashboard_page.png)           |
-| **Marketplace**        | ![About](./assets/screenShots/slotswapper_marketPlace_page.png)             |
-| **Swap Requests**      | ![Requests](./assets/screenShots/slotswapper_reuest_page.png)               |
+| **Landing Page**       | ![Landing](./assets/ScreenShots/slotsswapper_landing_page.png)              |
+| **Dashboard**          | ![Dashboard](./assets/ScreenShots/slotswapper_dashboard_page.png)           |
+| **Marketplace**        | ![About](./assets//ScreenShots/slotswapper_marketPlace_page.png)            |
+| **Swap Requests**      | ![Requests](./assets/ScreenShots/slotswapper_reuest_page.png)               |
 
 
 ---
