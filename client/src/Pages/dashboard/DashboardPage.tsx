@@ -23,6 +23,7 @@ const DashboardPage: React.FC = () => {
   const [title, setTitle] = useState('');
   const [startTime, setStartTime] = useState('');
   const [endTime, setEndTime] = useState('');
+  const [status, setStatus] = useState<EventStatus>(EventStatus.BUSY);
 
   // Fetch events on mount
   useEffect(() => {
@@ -34,13 +35,16 @@ const DashboardPage: React.FC = () => {
     if (event) {
       dispatch(setSelectedEvent(event));
       setTitle(event.title);
-      setStartTime(event.startTime.slice(0, 16)); // convert ISO to local input format
+      // convert ISO to `datetime-local` compatible format (slice to remove seconds / timezone)
+      setStartTime(event.startTime.slice(0, 16));
       setEndTime(event.endTime.slice(0, 16));
+      setStatus(event.status as EventStatus);
     } else {
       dispatch(clearSelectedEvent());
       setTitle('');
       setStartTime('');
       setEndTime('');
+      setStatus(EventStatus.BUSY);
     }
     setShowModal(true);
   };
@@ -50,9 +54,15 @@ const DashboardPage: React.FC = () => {
     e.preventDefault();
 
     if (selectedEvent) {
-      const data: UpdateEventData = { title, startTime, endTime };
+      const data: UpdateEventData = {
+        title,
+        startTime,
+        endTime,
+        status, // include the updated status when editing
+      };
       dispatch(updateEvent({ id: selectedEvent._id, data }));
     } else {
+      // On create we don't set status here — backend will use default BUSY
       const data: CreateEventData = { title, startTime, endTime };
       dispatch(createEvent(data));
     }
@@ -152,7 +162,7 @@ const DashboardPage: React.FC = () => {
 
       {/* Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div
             className="p-6 rounded-lg w-full max-w-md"
             style={{ background: 'var(--bg-surface)', border: '1px solid var(--color-border)' }}
@@ -176,6 +186,7 @@ const DashboardPage: React.FC = () => {
                   required
                 />
               </div>
+
               <div>
                 <label className="block text-sm mb-1">Start Time</label>
                 <input
@@ -191,6 +202,7 @@ const DashboardPage: React.FC = () => {
                   required
                 />
               </div>
+
               <div>
                 <label className="block text-sm mb-1">End Time</label>
                 <input
@@ -206,6 +218,27 @@ const DashboardPage: React.FC = () => {
                   required
                 />
               </div>
+
+              {/* Status select shown when editing an existing event */}
+              {selectedEvent && (
+                <div>
+                  <label className="block text-sm mb-1">Status</label>
+                  <select
+                    value={status}
+                    onChange={(e) => setStatus(e.target.value as EventStatus)}
+                    className="w-full px-3 py-2 rounded-md"
+                    style={{
+                      background: 'var(--bg-card)',
+                      border: '1px solid var(--color-border)',
+                      color: 'var(--color-text-primary)',
+                    }}
+                  >
+                    <option value={EventStatus.BUSY}>{EventStatus.BUSY}</option>
+                    <option value={EventStatus.SWAPPABLE}>{EventStatus.SWAPPABLE}</option>
+                    <option value={EventStatus.SWAP_PENDING}>{EventStatus.SWAP_PENDING}</option>
+                  </select>
+                </div>
+              )}
 
               <div className="flex justify-end gap-2 mt-4">
                 <button
