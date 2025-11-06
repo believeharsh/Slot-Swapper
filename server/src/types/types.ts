@@ -72,6 +72,7 @@ export interface ISwapRequest extends Document {
   targetUserId: Types.ObjectId;
   targetSlotId: Types.ObjectId;
   status: SwapRequestStatus;
+  message? : string,
   createdAt: Date;
   updatedAt: Date;
 }
