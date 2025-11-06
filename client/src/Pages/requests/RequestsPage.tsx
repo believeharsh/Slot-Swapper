@@ -8,8 +8,11 @@ import {
   respondToSwapRequest,
 } from '../../store/slices/swapSlice';
 import type { SwapRequest } from '../../types';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 const RequestsPage: React.FC = () => {
+  useDocumentTitle('Swap Request');
+
   const dispatch = useDispatch<AppDispatch>();
   const { incomingRequests, outgoingRequests, isLoading, error } = useSelector(
     (state: RootState) => state.swap

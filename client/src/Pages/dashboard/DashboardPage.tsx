@@ -12,8 +12,10 @@ import {
 } from '../../store/slices/eventSlice';
 import type { CreateEventData, UpdateEventData, Event } from '../../types';
 import { EventStatus } from '../../types';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 const DashboardPage: React.FC = () => {
+  useDocumentTitle('Home');
   const dispatch = useDispatch<AppDispatch>();
   const { events, isLoading, selectedEvent, error } = useSelector(
     (state: RootState) => state.events

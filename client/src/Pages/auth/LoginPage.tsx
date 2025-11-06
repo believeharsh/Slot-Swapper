@@ -4,8 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { login, clearError } from '../../store/slices/authSlice';
 import type { AppDispatch, RootState } from '../../store';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 const LoginPage: React.FC = () => {
+  useDocumentTitle('Slot Swapper | Login');
+
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);

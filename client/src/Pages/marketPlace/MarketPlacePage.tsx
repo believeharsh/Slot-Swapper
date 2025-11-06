@@ -8,8 +8,11 @@ import {
 } from '../../store/slices/swapSlice';
 import { fetchMyEvents } from '../../store/slices/eventSlice';
 import type { Event, CreateSwapRequestData } from '../../types';
+import { useDocumentTitle } from '../../hooks/useDocumentTitle';
 
 const MarketplacePage: React.FC = () => {
+  useDocumentTitle('Market Place');
+
   const dispatch = useDispatch<AppDispatch>();
   const { swappableSlots, isLoading: swappablesLoading, error: swapError } = useSelector(
     (state: RootState) => state.swap
