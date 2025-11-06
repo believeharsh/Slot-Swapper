@@ -17,18 +17,52 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
   return <>{children}</>;
 };
 
+// ✅ PublicRoute — redirects to dashboard if already logged in
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  if (isAuthenticated) return <Navigate to="/app" replace />;
+  return <>{children}</>;
+};
+
 const App: React.FC = () => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Routes */}
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        {/* Root Route - Smart Redirect */}
+        <Route 
+          path="/" 
+          element={
+            isAuthenticated ? (
+              <Navigate to="/app" replace />
+            ) : (
+              <LandingPage />
+            )
+          } 
+        />
 
-        {/* Protected Routes */}
-        <Route path="/" element={<LandingPage />} />
+        {/* Auth Routes - redirect to /app if already logged in */}
         <Route
-          path="/app/*"
+          path="/login"
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
+        <Route
+          path="/signup"
+          element={
+            <PublicRoute>
+              <SignupPage />
+            </PublicRoute>
+          }
+        />
+
+        {/* Protected App Routes */}
+        <Route
+          path="/app"
           element={
             <ProtectedRoute>
               <Layout />
@@ -40,8 +74,17 @@ const App: React.FC = () => {
           <Route path="requests" element={<RequestsPage />} />
         </Route>
 
-        {/* Fallback */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        {/* Fallback - redirect unknown routes based on auth status */}
+        <Route 
+          path="*" 
+          element={
+            isAuthenticated ? (
+              <Navigate to="/app" replace />
+            ) : (
+              <Navigate to="/" replace />
+            )
+          } 
+        />
       </Routes>
     </BrowserRouter>
   );

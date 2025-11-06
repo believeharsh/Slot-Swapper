@@ -37,7 +37,7 @@ const Layout: React.FC = () => {
             to="/"
             className="flex items-center space-x-2 sm:space-x-3 flex-shrink-0"
           >
-            <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center overflow-hidden ">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 flex items-center justify-center overflow-hidden">
               <img
                 src={logo}
                 alt="SlotSwapper logo"
@@ -53,13 +53,13 @@ const Layout: React.FC = () => {
           </Link>
         </div>
         <nav className="flex items-center gap-3 text-sm">
-          <NavLink to="/" className={navLinkClass}>
+          <NavLink to="/app" end className={navLinkClass}>
             Dashboard
           </NavLink>
-          <NavLink to="/marketplace" className={navLinkClass}>
+          <NavLink to="/app/marketplace" className={navLinkClass}>
             Marketplace
           </NavLink>
-          <NavLink to="/requests" className={navLinkClass}>
+          <NavLink to="/app/requests" className={navLinkClass}>
             Requests
           </NavLink>
           <button
@@ -79,6 +79,8 @@ const Layout: React.FC = () => {
       <main className="flex-1 px-6 py-6">
         <Outlet />
       </main>
+
+      {/* <Footer/> */}
     </div>
   );
 };
