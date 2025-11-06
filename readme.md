@@ -1,26 +1,37 @@
 # SlotSwapper
 
 **SlotSwapper** is a modern web application that helps users **manage, track, and swap their work slots or events** seamlessly.  
-It allows users to create events, mark them as *Swappable*, and send or respond to swap requests — all in one intuitive dashboard.
+It allows users to create events, mark them as _Swappable_, and send or respond to swap requests — all in one intuitive dashboard.
 
 **Live Application:** [SlotSwapper](https://slot-swapper-pink.vercel.app)  
 **Repository:** [GitHub - SlotSwapper](https://github.com/believeharsh/Slot-Swapper)
 
 ---
 
-## 🚀 Features
+##  Features
 
 SlotSwapper provides a complete and easy-to-use system for managing work schedules and event swaps efficiently.
 
-- 🗓 **Event Management:** Create, edit, and delete your slots/events effortlessly.  
-- 🔁 **Slot Swapping:** Mark events as *Swappable* and send swap requests to others.  
-- 📬 **Request Handling:** Accept or reject incoming swap requests directly from your dashboard.  
-- 💬 **Swap Details Modal:** View detailed information about swap requests before taking action.  
-- 🧠 **Smart Status System:** Automatically updates event statuses — `BUSY`, `SWAPPABLE`, `SWAP_PENDING`.  
-- 🔐 **Authentication:** Secure signup/login using JWT with token-based session management.  
-- 🌓 **Modern Dark UI:** Consistent, elegant dark theme with Tailwind CSS variables.  
-- ⚙️ **Redux Toolkit Integration:** Centralized and efficient state management with Redux persist.  
-- ⚡ **Responsive Design:** Fully optimized for both desktop and mobile devices.
+-  **Event Management:** Create, edit, and delete your slots/events effortlessly.
+-  **Slot Swapping:** Mark events as _Swappable_ and send swap requests to others.
+-  **Request Handling:** Accept or reject incoming swap requests directly from your dashboard.
+-  **Swap Details Modal:** View detailed information about swap requests before taking action.
+-  **Smart Status System:** Automatically updates event statuses — `BUSY`, `SWAPPABLE`, `SWAP_PENDING`.
+-  **Authentication:** Secure signup/login using JWT with token-based session management.
+-  **Modern Dark UI:** Consistent, elegant dark theme with Tailwind CSS variables.
+-  **Redux Toolkit Integration:** Centralized and efficient state management with Redux persist.
+-  **Responsive Design:** Fully optimized for both desktop and mobile devices.
+
+---
+
+## Screenshots
+
+| Feature           | Preview                                                           |
+| ----------------- | ----------------------------------------------------------------- |
+| **Landing Page**  | ![Landing](./assets/ScreenShots/slotsswapper_landing_page.png)    |
+| **Dashboard**     | ![Dashboard](./assets/ScreenShots/slotswapper_dashboard_page.png) |
+| **Marketplace**   | ![About](./assets//ScreenShots/slotswapper_marketPlace_page.png)  |
+| **Swap Requests** | ![Requests](./assets/ScreenShots/slotswapper_reuest_page.png)     |
 
 ---
 
@@ -29,20 +40,22 @@ SlotSwapper provides a complete and easy-to-use system for managing work schedul
 SlotSwapper is built with a modern and scalable stack — ensuring performance, reliability, and developer productivity.
 
 ### **Frontend**
-- ⚛️ **React 18** with **TypeScript**  
-- 🧰 **Redux Toolkit** for state management  
-- 💾 **Redux Persist** for persistent authentication  
-- 💅 **Tailwind CSS** with custom dark theme using CSS variables  
-- 🌐 **React Router v6** for navigation  
-- 🔗 **Axios** for API communication  
-- 📅 **Date-fns** for date formatting and manipulation  
+
+- **React 18** with **TypeScript**
+- **Redux Toolkit** for state management
+- **Redux Persist** for persistent authentication
+- **Tailwind CSS** with custom dark theme using CSS variables
+- **React Router v6** for navigation
+- **Axios** for API communication
+- **Date-fns** for date formatting and manipulation
 
 ### **Backend**
-- 🟢 **Node.js** with **Express**  
-- 🍃 **MongoDB** with **Mongoose** ODM  
-- 🔒 **JWT Authentication** with bcrypt password hashing  
-- 🧩 **TypeScript** for end-to-end type safety  
-- 🛡️ **CORS** and security middleware  
+
+- **Node.js** with **Express**
+- **MongoDB** with **Mongoose** ODM
+- **JWT Authentication** with bcrypt password hashing
+- **TypeScript** for end-to-end type safety
+- **CORS** and security middleware
 
 ---
 
@@ -80,24 +93,27 @@ SlotSwapper/
 ## ⚙️ Getting Started
 
 ### **Prerequisites**
-- **Node.js** 18+ and **npm** or **yarn**  
-- **MongoDB** connection string (local instance or MongoDB Atlas)  
-- **Git** for cloning the repository  
+
+- **Node.js** 18+ and **npm** or **yarn**
+- **MongoDB** connection string (local instance or MongoDB Atlas)
+- **Git** for cloning the repository
 
 ### **Installation**
 
 1. **Clone the repository**
+
    ```bash
    git clone https://github.com/believeharsh/SlotSwapper.git
    cd SlotSwapper
    ```
 
 2. **Install dependencies**
+
    ```bash
    # Install frontend dependencies
    cd client
    npm install
-   
+
    # Install backend dependencies
    cd ../server
    npm install
@@ -106,6 +122,7 @@ SlotSwapper/
 3. **Configure environment variables**
 
    Create `.env` in the **server** directory:
+
    ```env
    PORT=5000
    MONGODB_URI=your_mongodb_connection_string
@@ -115,24 +132,26 @@ SlotSwapper/
    ```
 
    Create `.env` in the **client** directory:
+
    ```env
    VITE_API_URL=http://localhost:5000/api
    ```
 
 4. **Run the application**
+
    ```bash
    # Start backend server (from server directory)
    cd server
    npm run dev
-   
+
    # Start frontend (from client directory, in new terminal)
    cd client
    npm run dev
    ```
 
 5. **Access the application**
-   - **Frontend:** http://localhost:5173  
-   - **Backend API:** http://localhost:5000  
+   - **Frontend:** http://localhost:5173
+   - **Backend API:** http://localhost:5000
 
 ---
 
@@ -157,39 +176,32 @@ The frontend build will be created in `client/dist/` and backend in `server/dist
 ## 🧩 API Endpoints
 
 ### **Authentication**
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/auth/signup` | POST | Register a new user |
-| `/api/auth/login` | POST | Login and receive JWT token |
-| `/api/auth/me` | GET | Get current authenticated user info |
+
+| Endpoint           | Method | Description                         |
+| ------------------ | ------ | ----------------------------------- |
+| `/api/auth/signup` | POST   | Register a new user                 |
+| `/api/auth/login`  | POST   | Login and receive JWT token         |
+| `/api/auth/me`     | GET    | Get current authenticated user info |
 
 ### **Events Management**
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/events` | GET | Fetch all events for logged-in user |
-| `/api/events/:id` | GET | Fetch single event details |
-| `/api/events` | POST | Create a new event |
-| `/api/events/:id` | PUT | Update an existing event |
-| `/api/events/:id` | DELETE | Delete an event |
+
+| Endpoint          | Method | Description                         |
+| ----------------- | ------ | ----------------------------------- |
+| `/api/events`     | GET    | Fetch all events for logged-in user |
+| `/api/events/:id` | GET    | Fetch single event details          |
+| `/api/events`     | POST   | Create a new event                  |
+| `/api/events/:id` | PUT    | Update an existing event            |
+| `/api/events/:id` | DELETE | Delete an event                     |
 
 ### **Slot Swapping**
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/swappable-slots` | GET | Fetch all swappable events from other users |
-| `/api/swap-request` | POST | Create a swap request |
-| `/api/swap-requests/incoming` | GET | Fetch incoming swap requests |
-| `/api/swap-requests/outgoing` | GET | Fetch outgoing swap requests |
-| `/api/swap-response/:requestId` | POST | Accept or reject a swap request |
 
----
-
-| Feature                | Preview                                                                     |
-| ---------------------- | ---------------------------------------------------------------             |
-| **Landing Page**       | ![Landing](./assets/ScreenShots/slotsswapper_landing_page.png)              |
-| **Dashboard**          | ![Dashboard](./assets/ScreenShots/slotswapper_dashboard_page.png)           |
-| **Marketplace**        | ![About](./assets//ScreenShots/slotswapper_marketPlace_page.png)            |
-| **Swap Requests**      | ![Requests](./assets/ScreenShots/slotswapper_reuest_page.png)               |
-
+| Endpoint                        | Method | Description                                 |
+| ------------------------------- | ------ | ------------------------------------------- |
+| `/api/swappable-slots`          | GET    | Fetch all swappable events from other users |
+| `/api/swap-request`             | POST   | Create a swap request                       |
+| `/api/swap-requests/incoming`   | GET    | Fetch incoming swap requests                |
+| `/api/swap-requests/outgoing`   | GET    | Fetch outgoing swap requests                |
+| `/api/swap-response/:requestId` | POST   | Accept or reject a swap request             |
 
 ---
 
@@ -197,11 +209,12 @@ The frontend build will be created in `client/dist/` and backend in `server/dist
 
 SlotSwapper is deployed using modern cloud platforms for optimal performance:
 
-- **Frontend:** [Vercel](https://vercel.com) - https://slot-swapper-pink.vercel.app 
-- **Backend:** [Render](https://render.com) - https://slot-swapper-api.onrender.com  
-- **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas)  
+- **Frontend:** [Vercel](https://vercel.com) - https://slot-swapper-pink.vercel.app
+- **Backend:** [Render](https://render.com) - https://slot-swapper-api.onrender.com
+- **Database:** [MongoDB Atlas](https://www.mongodb.com/atlas)
 
 ### **Deployment Notes**
+
 - Environment variables are configured in respective platform dashboards
 - Backend uses automatic HTTPS and CORS configuration
 - Frontend uses optimized production builds with code splitting
@@ -215,21 +228,22 @@ Contributions are always welcome! Whether it's bug fixes, feature additions, or 
 ### **How to Contribute:**
 
 1. **Fork the repository**
-2. **Create a feature branch:**  
+2. **Create a feature branch:**
    ```bash
    git checkout -b feature/amazing-feature
    ```
-3. **Commit your changes:**  
+3. **Commit your changes:**
    ```bash
    git commit -m 'Add some amazing feature'
    ```
-4. **Push to your branch:**  
+4. **Push to your branch:**
    ```bash
    git push origin feature/amazing-feature
    ```
 5. **Open a Pull Request** 🎉
 
 ### **Contribution Guidelines:**
+
 - Follow existing code style and conventions
 - Write clear commit messages
 - Add comments for complex logic
