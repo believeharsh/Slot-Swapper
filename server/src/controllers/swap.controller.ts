@@ -26,6 +26,8 @@ export const getSwappableSlots = async (req: AuthRequest, res: Response): Promis
       .sort({ startTime: 1 })
       .lean();
 
+    console.log(swappableSlots); 
+
     res.status(200).json({
       success: true,
       data: swappableSlots,
