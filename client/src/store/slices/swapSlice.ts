@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { swapAPI } from '../../services/api';
-import type { SwapState, CreateSwapRequestData, SwapResponseData, SwapRequest, Event } from '../../types';
+import type { SwapState, CreateSwapRequestData, SwapRequest} from '../../types';
 
 const initialState: SwapState = {
   swappableSlots: [],
@@ -162,7 +162,7 @@ const swapSlice = createSlice({
       })
       .addCase(respondToSwapRequest.fulfilled, (state, action) => {
         state.isLoading = false;
-        const { requestId, accepted } = action.payload;
+        const { requestId } = action.payload;
         
         // Remove from incoming requests
         state.incomingRequests = state.incomingRequests.filter(

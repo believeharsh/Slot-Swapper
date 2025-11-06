@@ -14,7 +14,7 @@ const RequestsPage: React.FC = () => {
   const { incomingRequests, outgoingRequests, isLoading, error } = useSelector(
     (state: RootState) => state.swap
   );
-  const { user } = useSelector((s: RootState) => s.auth);
+  // const { user } = useSelector((s: RootState) => s.auth);s
 
   // local map of requestId -> loading state / message
   const [processing, setProcessing] = useState<Record<string, boolean>>({});

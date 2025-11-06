@@ -41,11 +41,15 @@ export interface AuthResponse {
 // EVENT TYPES
 // ============================================
 
-export enum EventStatus {
-  BUSY = 'BUSY',
-  SWAPPABLE = 'SWAPPABLE',
-  SWAP_PENDING = 'SWAP_PENDING'
-}
+// Use const object instead of enum (Vite compatible)
+export const EventStatus = {
+  BUSY: 'BUSY',
+  SWAPPABLE: 'SWAPPABLE',
+  SWAP_PENDING: 'SWAP_PENDING'
+} as const;
+
+// Type from the const object
+export type EventStatus = typeof EventStatus[keyof typeof EventStatus];
 
 export interface Event {
   _id: string;
@@ -82,11 +86,15 @@ export interface UpdateEventData {
 // SWAP TYPES
 // ============================================
 
-export enum SwapRequestStatus {
-  PENDING = 'PENDING',
-  ACCEPTED = 'ACCEPTED',
-  REJECTED = 'REJECTED'
-}
+// Use const object instead of enum (Vite compatible)
+export const SwapRequestStatus = {
+  PENDING: 'PENDING',
+  ACCEPTED: 'ACCEPTED',
+  REJECTED: 'REJECTED'
+} as const;
+
+// Type from the const object
+export type SwapRequestStatus = typeof SwapRequestStatus[keyof typeof SwapRequestStatus];
 
 export interface SwapRequest {
   _id: string;
@@ -110,7 +118,7 @@ export interface SwapState {
 export interface CreateSwapRequestData {
   mySlotId: string;
   theirSlotId: string;
-  message : string
+  message: string
 }
 
 export interface SwapResponseData {
