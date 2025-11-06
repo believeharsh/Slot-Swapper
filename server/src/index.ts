@@ -8,6 +8,7 @@ import { errorHandler, notFound } from './middlewares/error.middleware';
 import authRoutes from './routes/auth.route';
 import eventRoutes from './routes/event.route';
 import swapRoutes from './routes/swap.route';
+import { keepAlive } from './services/keepAlive';
 
 // Load environment variables
 dotenv.config();
@@ -22,6 +23,12 @@ const app: Application = express();
 // Body parser
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+if (process.env.NODE_ENV === 'production') {
+  const url = 'https://slot-swapper-api-q6ol.onrender.com';
+  keepAlive(url);
+}
+
 
 // CORS configuration
 const corsOptions = {
